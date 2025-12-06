@@ -100,7 +100,8 @@ if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user'] = [
                 'id' => $user['id'],
                 'name' => $user['name'],
-                'role' => $user['role']
+                'role' => $user['role'],
+                'avatar' => $user['avatar'] ?? null
             ];
             // Opsional: Simpan user_id terpisah jika file lain membutuhkannya
             $_SESSION['user_id'] = $user['id']; 
