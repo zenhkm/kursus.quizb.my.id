@@ -64,6 +64,16 @@ if ($page === 'admin') {
 
 // ... di dalam index.php bagian admin ...
 
+} elseif ($page === 'admin_progress') {
+    $pageTitle = 'Rekap Progres';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_progress.php';
+    include __DIR__ . '/layout/footer.php';
+
+// ...
+
+// ... di dalam index.php bagian admin ...
+
 } elseif ($page === 'admin_users') {
     $pageTitle = 'Kelola User';
     include __DIR__ . '/layout/header.php';
