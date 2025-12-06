@@ -115,7 +115,7 @@ $sqlQ = "
     SELECT q.*
     FROM lesson_questions q
     WHERE q.lesson_id = ?
-    ORDER BY RAND()    <-- GANTI JADI INI (ACAK)
+    ORDER BY RAND()   
 ";
 $stmtQ = $pdo->prepare($sqlQ);
 $stmtQ->execute(array($lesson['id']));
