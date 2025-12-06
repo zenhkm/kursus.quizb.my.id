@@ -24,7 +24,7 @@ jobs:
 
         
         # Pastikan folder tujuan sudah benar (sesuai settingan cPanel Anda)
-        server-dir: /public_html/kursus.quizb.my.id/
+        server-dir: /public_html/mandiribelajar.my.id/
 
         exclude: |
           **/.git*
