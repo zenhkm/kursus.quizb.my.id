@@ -20,9 +20,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
 
-		security: false
-
-      
+		   
         # Pastikan folder tujuan sudah benar (sesuai settingan cPanel Anda)
         server-dir: /public_html/kursus.quizb.my.id/
 
