@@ -20,9 +20,8 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
 
-	# --- PERBAIKAN DI SINI ---
-        # Tambahkan 'security: false' untuk mengatasi error Control Socket
-        security: false
+	      # --- PERBAIKAN DI SINI ---
+
         
         # Pastikan folder tujuan sudah benar (sesuai settingan cPanel Anda)
         server-dir: /public_html/kursus.quizb.my.id/
