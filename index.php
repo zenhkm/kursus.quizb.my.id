@@ -62,6 +62,22 @@ if ($page === 'admin') {
     include __DIR__ . '/layout/footer.php';
 // ...
 
+// ... di dalam index.php bagian admin ...
+
+} elseif ($page === 'admin_users') {
+    $pageTitle = 'Kelola User';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_users.php';
+    include __DIR__ . '/layout/footer.php';
+
+} elseif ($page === 'admin_user_form') {
+    $pageTitle = 'Form User';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_user_form.php';
+    include __DIR__ . '/layout/footer.php';
+
+// ...
+
 // -- ROUTE HALAMAN UTAMA (USER) --
 } elseif ($currentCourseSlug && $lessonId) {
     $pageTitle = 'Materi Kursus';

@@ -17,11 +17,19 @@ $courses = $stmt->fetchAll();
 ?>
 
 <div class="container my-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3">Dashboard Admin</h1>
-        <a href="index.php?page=admin_course_form" class="btn btn-primary">
-            + Tambah Kursus Baru
-        </a>
+<div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h1 class="h3">Dashboard Admin</h1>
+            <p class="text-muted">Kelola kursus, materi, dan peserta dalam satu tempat.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <a href="index.php?page=admin_users" class="btn btn-outline-dark me-2">
+                👥 Kelola Peserta
+            </a>
+            <a href="index.php?page=admin_course_form" class="btn btn-primary">
+                + Tambah Kursus
+            </a>
+        </div>
     </div>
 
     <?php if (isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
