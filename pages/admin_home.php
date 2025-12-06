@@ -34,8 +34,8 @@ $courses = $stmt->fetchAll();
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
-    
-    
+
+
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
@@ -52,34 +52,40 @@ $courses = $stmt->fetchAll();
                     </thead>
                     <tbody>
                         <?php foreach ($courses as $c): ?>
-                        <tr>
-                            <td class="px-4">
-                                <div class="fw-bold"><?= htmlspecialchars($c['title']) ?></div>
-                                <small class="text-muted">Slug: <?= htmlspecialchars($c['slug']) ?></small>
-                            </td>
-                            <td><?= htmlspecialchars($c['level']) ?></td>
-                            <td>
-                                <?php if ($c['status'] == 'Tersedia'): ?>
-                                    <span class="badge bg-success">Tersedia</span>
-                                <?php else: ?>
-                                    <span class="badge bg-secondary">Segera Hadir</span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?= (int)$c['lessons'] ?></td>
-                            <td class="text-end px-4">
-                                <a href="index.php?page=admin_course_form&id=<?= $c['id'] ?>" 
-                                   class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="index.php?page=admin&delete_course=<?= $c['id'] ?>" 
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('Yakin hapus kursus ini? Semua materi di dalamnya akan ikut terhapus!');">
-                                    Hapus
-                                </a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="px-4">
+                                    <div class="fw-bold"><?= htmlspecialchars($c['title']) ?></div>
+                                    <small class="text-muted">Slug: <?= htmlspecialchars($c['slug']) ?></small>
+                                </td>
+                                <td><?= htmlspecialchars($c['level']) ?></td>
+                                <td>
+                                    <?php if ($c['status'] == 'Tersedia'): ?>
+                                        <span class="badge bg-success">Tersedia</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-secondary">Segera Hadir</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?= (int)$c['lessons'] ?></td>
+                                <td class="text-end px-4">
+                                    <a href="index.php?page=admin_lessons&course_id=<?= $c['id'] ?>"
+                                        class="btn btn-sm btn-primary me-1">Materi</a>
+
+                                    <a href="index.php?page=admin_course_form&id=<?= $c['id'] ?>"
+                                        class="btn btn-sm btn-outline-secondary">Info</a>
+
+                                    <a href="index.php?page=admin&delete_course=<?= $c['id'] ?>"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Yakin hapus kursus ini?');">
+                                        Hapus
+                                    </a>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
-                        
-                        <?php if(empty($courses)): ?>
-                            <tr><td colspan="5" class="text-center py-4">Belum ada data kursus.</td></tr>
+
+                        <?php if (empty($courses)): ?>
+                            <tr>
+                                <td colspan="5" class="text-center py-4">Belum ada data kursus.</td>
+                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

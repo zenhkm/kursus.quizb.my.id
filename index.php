@@ -18,6 +18,18 @@ if ($page === 'admin') {
     include __DIR__ . '/pages/admin_home.php'; // File baru
     include __DIR__ . '/layout/footer.php';
 
+} elseif ($page === 'admin_lessons') {
+    $pageTitle = 'Kelola Materi';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_lessons.php';
+    include __DIR__ . '/layout/footer.php';
+
+} elseif ($page === 'admin_lesson_form') {
+    $pageTitle = 'Form Materi';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_lesson_form.php';
+    include __DIR__ . '/layout/footer.php';
+
 } elseif ($page === 'profile') {
     $pageTitle = 'Profil Saya';
     include __DIR__ . '/layout/header.php';
