@@ -67,17 +67,18 @@ $courses = $stmt->fetchAll();
                                 </td>
                                 <td><?= (int)$c['lessons'] ?></td>
                                 <td class="text-end px-4">
+                                    <a href="index.php?page=admin_modules&course_id=<?= $c['id'] ?>"
+                                        class="btn btn-sm btn-warning me-1 text-dark fw-bold" title="Kelola Bab">Bab</a>
+
                                     <a href="index.php?page=admin_lessons&course_id=<?= $c['id'] ?>"
                                         class="btn btn-sm btn-primary me-1">Materi</a>
 
                                     <a href="index.php?page=admin_course_form&id=<?= $c['id'] ?>"
-                                        class="btn btn-sm btn-outline-secondary">Info</a>
+                                        class="btn btn-sm btn-outline-secondary" title="Edit Info">Info</a>
 
                                     <a href="index.php?page=admin&delete_course=<?= $c['id'] ?>"
-                                        class="btn btn-sm btn-outline-danger"
-                                        onclick="return confirm('Yakin hapus kursus ini?');">
-                                        Hapus
-                                    </a>
+                                        class="btn btn-sm btn-outline-danger ms-1"
+                                        onclick="return confirm('Yakin hapus kursus ini?');">×</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
