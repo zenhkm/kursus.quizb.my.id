@@ -6,6 +6,7 @@ if (!isset($pageTitle)) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($pageTitle) ?></title>
@@ -14,19 +15,21 @@ if (!isset($pageTitle)) {
     <!-- Bootstrap 5 CDN -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
 
     <style>
         body {
             background: #f5f7fb;
         }
+
         .navbar-brand span {
             font-weight: 700;
         }
+
         .hero-section {
             padding: 40px 0 24px 0;
         }
+
         .hero-badge {
             font-size: 0.85rem;
             padding: 4px 10px;
@@ -37,6 +40,7 @@ if (!isset($pageTitle)) {
             align-items: center;
             gap: 6px;
         }
+
         .course-card {
             border-radius: 16px;
             border: 1px solid #e0e4f0;
@@ -44,34 +48,41 @@ if (!isset($pageTitle)) {
             transition: transform 0.15s ease, box-shadow 0.15s ease;
             background: #ffffff;
         }
+
         .course-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
         }
+
         .course-status {
             font-size: 0.8rem;
             padding: 2px 8px;
             border-radius: 999px;
         }
+
         .status-tersedia {
             background: #e7f8ef;
             color: #13723d;
         }
+
         .status-segera {
             background: #fff4e5;
             color: #b56500;
         }
+
         .footer {
             font-size: 0.85rem;
             color: #6b7280;
             padding: 20px 0;
         }
+
         .section-label {
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #6b7280;
         }
+
         .step-badge {
             width: 28px;
             height: 28px;
@@ -84,36 +95,54 @@ if (!isset($pageTitle)) {
         }
     </style>
 </head>
+
 <body>
-    
 
-    
 
-<nav class="navbar navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.php">
-            <span>Kursus</span>&nbsp;<span>Online</span>
-        </a>
-        <div class="d-flex align-items-center">
-            <?php if (isset($_SESSION['user'])): ?>
-                
-                <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
-                    <a href="index.php?page=admin" class="btn btn-danger btn-sm me-2">
-                        ⚙️ Admin Panel
+
+
+    <nav class="navbar navbar-light bg-white border-bottom shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.php">
+                <span>Kursus</span>&nbsp;<span>Online</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <?php if (isset($_SESSION['user'])): ?>
+
+                    <?php if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <a href="index.php?page=admin" class="btn btn-danger btn-sm me-2">
+                            ⚙️ Admin Panel
+                        </a>
+                    <?php endif; ?>
+
+                    <a href="index.php?page=profile" class="text-decoration-none d-flex align-items-center gap-2 border rounded-pill px-2 py-1 bg-light">
+
+                        <?php
+                        $userAvatar = $_SESSION['user']['avatar'] ?? null;
+                        $userName   = $_SESSION['user']['name'] ?? 'User';
+
+                        if (!empty($userAvatar) && file_exists('uploads/' . $userAvatar)):
+                        ?>
+                            <img src="uploads/<?= htmlspecialchars($userAvatar) ?>"
+                                alt="User"
+                                class="rounded-circle"
+                                style="width: 32px; height: 32px; object-fit: cover;">
+                        <?php else: ?>
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px; font-size: 0.9rem; font-weight: bold;">
+                                <?= strtoupper(substr($userName, 0, 1)) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <span class="text-dark small fw-semibold me-1 d-none d-sm-inline">
+                            <?= htmlspecialchars($userName) ?>
+                        </span>
                     </a>
+
+                <?php else: ?>
+                    <a href="auth.php?action=login" class="btn btn-outline-light btn-sm me-2">Login</a>
+                    <a href="auth.php?action=register" class="btn btn-warning btn-sm">Daftar</a>
                 <?php endif; ?>
-                
-                <a href="index.php?page=profile" class="btn btn-light btn-sm me-2 fw-semibold text-primary">
-                    👤 <?= htmlspecialchars($_SESSION['user']['name']) ?>
-                </a>
-                <a href="auth.php?action=logout" class="btn btn-outline-secondary btn-sm">
-                    Logout
-                </a>
-                
-            <?php else: ?>
-                <a href="auth.php?action=login" class="btn btn-outline-light btn-sm me-2">Login</a>
-                <a href="auth.php?action=register" class="btn btn-warning btn-sm">Daftar</a>
-            <?php endif; ?>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
