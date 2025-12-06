@@ -9,13 +9,13 @@ error_reporting(E_ALL);
 
 // Pastikan $lessonId dan $currentCourseSlug sudah diset dari index.php
 if (empty($lessonId) || empty($currentCourseSlug)) {
-    ?>
+?>
     <div class="container my-5">
         <div class="alert alert-danger">
             Parameter materi tidak lengkap.
         </div>
     </div>
-    <?php
+<?php
     return;
 }
 
@@ -38,13 +38,13 @@ $stmt->execute(array($lessonId, $currentCourseSlug));
 $lesson = $stmt->fetch();
 
 if (!$lesson) {
-    ?>
+?>
     <div class="container my-5">
         <div class="alert alert-danger">
             Materi tidak ditemukan untuk kursus ini.
         </div>
     </div>
-    <?php
+<?php
     return;
 }
 
@@ -74,9 +74,9 @@ $sqlPrev = "
 ";
 $stmtPrev = $pdo->prepare($sqlPrev);
 $stmtPrev->execute(array(
-    $lesson['course_id'], 
-    $lesson['module_order'], 
-    $lesson['lesson_order'], 
+    $lesson['course_id'],
+    $lesson['module_order'],
+    $lesson['lesson_order'],
     $lesson['module_order']
 ));
 $prevLesson = $stmtPrev->fetch();
@@ -100,13 +100,13 @@ if ($prevLesson) {
 
 // Kalau tidak boleh akses, tampilkan pesan dan hentikan
 if (!$canAccessLesson) {
-    ?>
+?>
     <div class="container my-5">
         <div class="alert alert-warning">
             Untuk mengakses materi ini, Anda harus <strong>lulus</strong> materi sebelumnya terlebih dahulu.
         </div>
     </div>
-    <?php
+<?php
     return;
 }
 
@@ -115,7 +115,7 @@ $sqlQ = "
     SELECT q.*
     FROM lesson_questions q
     WHERE q.lesson_id = ?
-    ORDER BY q.id ASC
+    ORDER BY RAND()    <-- GANTI JADI INI (ACAK)
 ";
 $stmtQ = $pdo->prepare($sqlQ);
 $stmtQ->execute(array($lesson['id']));
@@ -214,7 +214,7 @@ if ($quizSubmitted && !empty($questions)) {
     // Simpan progres ke database
     // Simpan progres ke database
     try {
-        $hasRead   = 1; 
+        $hasRead   = 1;
         $hasPassed = $allCorrect ? 1 : 0;
         $lastScore = $correctCount;
 
@@ -265,7 +265,7 @@ if ($quizSubmitted && !empty($questions)) {
     // Cari lesson berikutnya di kursus ini
     $nextLesson = null;
     // PERBAIKAN: Urutkan berdasarkan Module/Bab dulu, baru Lesson/Materi
-        $sqlNext = "
+    $sqlNext = "
             SELECT l.id, l.title
             FROM lessons l
             JOIN course_modules m ON l.module_id = m.id
@@ -278,18 +278,18 @@ if ($quizSubmitted && !empty($questions)) {
             ORDER BY m.module_order ASC, l.lesson_order ASC
             LIMIT 1
         ";
-        $stmtNext = $pdo->prepare($sqlNext);
-        $stmtNext->execute(array(
-            $lesson['course_id'],       // Parameter 1: ID Kursus
-            $lesson['module_order'],    // Parameter 2: Bab saat ini
-            $lesson['lesson_order'],    // Parameter 3: Materi saat ini
-            $lesson['module_order']     // Parameter 4: Bab saat ini (untuk cari bab > ini)
-        ));
+    $stmtNext = $pdo->prepare($sqlNext);
+    $stmtNext->execute(array(
+        $lesson['course_id'],       // Parameter 1: ID Kursus
+        $lesson['module_order'],    // Parameter 2: Bab saat ini
+        $lesson['lesson_order'],    // Parameter 3: Materi saat ini
+        $lesson['module_order']     // Parameter 4: Bab saat ini (untuk cari bab > ini)
+    ));
     $nextLesson = $stmtNext->fetch();
 
-        // Untuk saat ini, kalau gagal simpan progress, tidak perlu mematikan halaman
-        // echo "DEBUG PROGRESS ERROR: " . htmlspecialchars($e->getMessage());
-    
+    // Untuk saat ini, kalau gagal simpan progress, tidak perlu mematikan halaman
+    // echo "DEBUG PROGRESS ERROR: " . htmlspecialchars($e->getMessage());
+
 }
 
 // ============================================================
@@ -322,7 +322,7 @@ if (!isset($hasPassedLesson)) {
             <a href="index.php" class="text-decoration-none">Beranda</a>
             &nbsp;›&nbsp;
             <a href="index.php?kursus=<?= htmlspecialchars($lesson['course_slug']) ?>"
-               class="text-decoration-none">
+                class="text-decoration-none">
                 <?= htmlspecialchars($lesson['course_title']) ?>
             </a>
             &nbsp;›&nbsp;
@@ -356,8 +356,10 @@ if (!isset($hasPassedLesson)) {
                             <?php endif; ?>
                         <?php endif; ?>
 
-                        <?php if ($lesson['content_type'] === 'text'
-                                  || $lesson['content_type'] === 'mixed'): ?>
+                        <?php if (
+                            $lesson['content_type'] === 'text'
+                            || $lesson['content_type'] === 'mixed'
+                        ): ?>
                             <?php
                             // Pecah materi per baris sebagai poin
                             $rawLines = preg_split('/\r\n|\r|\n/', trim($lesson['content_text']));
@@ -392,8 +394,8 @@ if (!isset($hasPassedLesson)) {
 
                                 <div class="d-flex align-items-center gap-2 mt-2">
                                     <button type="button"
-                                            id="btn-next-point"
-                                            class="btn btn-primary btn-sm">
+                                        id="btn-next-point"
+                                        class="btn btn-primary btn-sm">
                                         Lanjut
                                     </button>
                                     <small class="text-muted" id="lesson-hint">
@@ -415,7 +417,7 @@ if (!isset($hasPassedLesson)) {
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-body">
                         <div class="section-label mb-2">Status Belajar</div>
-                        
+
                         <?php if ($hasPassedLesson): ?>
                             <div class="alert alert-success d-flex align-items-center mb-0 p-2 small">
                                 <span class="fs-4 me-2">🎉</span>
@@ -433,9 +435,9 @@ if (!isset($hasPassedLesson)) {
                                 </div>
                             </div>
                         <?php endif; ?>
-            
+
                         <hr class="my-3 opacity-25">
-                        
+
                         <div class="small text-muted">
                             <strong>Ketentuan Lulus:</strong>
                             <ul class="mb-0 ps-3 mt-1">
@@ -466,14 +468,14 @@ if (!isset($hasPassedLesson)) {
                     <?php if ($quizResult['all_correct']): ?>
                         <div class="alert alert-success small">
                             <p class="mb-2">
-                                Alhamdulillah, semua jawaban Anda <strong>benar</strong> 
+                                Alhamdulillah, semua jawaban Anda <strong>benar</strong>
                                 (<?= $quizResult['correct'] ?>/<?= $quizResult['total'] ?>).
                                 Materi ini dinyatakan <strong>LULUS</strong>.
                             </p>
-                            
+
                             <?php if (!empty($nextLesson)): ?>
-                                <a href="index.php?kursus=<?= htmlspecialchars($lesson['course_slug']) ?>&lesson=<?= (int)$nextLesson['id'] ?>" 
-                                   class="btn btn-success btn-sm fw-bold mt-2">
+                                <a href="index.php?kursus=<?= htmlspecialchars($lesson['course_slug']) ?>&lesson=<?= (int)$nextLesson['id'] ?>"
+                                    class="btn btn-success btn-sm fw-bold mt-2">
                                     Lanjut ke materi berikutnya: <?= htmlspecialchars($nextLesson['title']) ?> →
                                 </a>
                             <?php else: ?>
@@ -484,7 +486,7 @@ if (!isset($hasPassedLesson)) {
                         </div>
                     <?php else: ?>
                         <div class="alert alert-danger small">
-                            Jawaban Anda belum semuanya benar 
+                            Jawaban Anda belum semuanya benar
                             (<?= $quizResult['correct'] ?>/<?= $quizResult['total'] ?>).
                             Silakan perhatikan pembahasan, lalu <strong>coba lagi</strong>.
                         </div>
@@ -515,25 +517,39 @@ if (!isset($hasPassedLesson)) {
                                     <?= nl2br(htmlspecialchars($q['question_text'])) ?>
                                 </div>
 
-                                <?php foreach ($opts as $opt): ?>
+                                <?php
+                                // --- LOGIKA PENGACAKAN JAWABAN ---
+                                // Kita acak array $opts agar posisinya berubah
+                                if (!$quizSubmitted && !empty($opts)) {
+                                    shuffle($opts);
+                                }
+                                // Array bantu untuk label visual agar tetap A, B, C, D (bukan acak C, A, D, B)
+                                $abcLabels = ['A', 'B', 'C', 'D', 'E'];
+                                ?>
+
+                                <?php foreach ($opts as $key => $opt): ?>
                                     <?php
+                                    $visualLabel = isset($abcLabels[$key]) ? $abcLabels[$key] : '?';
+
                                     $fieldName = 'q_' . $qid;
+                                    // ID input kita buat unik pakai label asli database biar tidak bentrok
                                     $idInput   = $fieldName . '_' . $opt['option_label'];
 
+                                    // Cek jawaban user (tetap bandingkan dengan label asli dari DB)
                                     $wasSelected = isset($selectedAnswers[$qid]) &&
-                                                   $selectedAnswers[$qid] === $opt['option_label'];
+                                        $selectedAnswers[$qid] === $opt['option_label'];
 
                                     $checkedAttr = $wasSelected ? 'checked' : '';
                                     ?>
                                     <div class="form-check small mb-1">
                                         <input class="form-check-input"
-                                               type="radio"
-                                               name="<?= htmlspecialchars($fieldName) ?>"
-                                               id="<?= htmlspecialchars($idInput) ?>"
-                                               value="<?= htmlspecialchars($opt['option_label']) ?>"
+                                            type="radio"
+                                            name="<?= htmlspecialchars($fieldName) ?>"
+                                            id="<?= htmlspecialchars($idInput) ?>"
+                                            value="<?= htmlspecialchars($opt['option_label']) ?>"
                                             <?= $checkedAttr ?>>
                                         <label class="form-check-label" for="<?= htmlspecialchars($idInput) ?>">
-                                            <strong><?= htmlspecialchars($opt['option_label']) ?>.</strong>
+                                            <strong><?= $visualLabel ?>.</strong>
                                             <?= nl2br(htmlspecialchars($opt['option_text'])) ?>
                                         </label>
                                     </div>
@@ -576,7 +592,7 @@ if (!isset($hasPassedLesson)) {
                     <div class="mt-3">
                         <?php if ($hasPassedLesson): ?>
                             <a class="btn btn-success btn-sm"
-                               href="index.php?kursus=<?= htmlspecialchars($lesson['course_slug']) ?>&lesson=<?= (int)$nextLesson['id'] ?>">
+                                href="index.php?kursus=<?= htmlspecialchars($lesson['course_slug']) ?>&lesson=<?= (int)$nextLesson['id'] ?>">
                                 Lanjut ke materi berikutnya:
                                 <?= htmlspecialchars($nextLesson['title']) ?>
                             </a>
@@ -596,66 +612,66 @@ if (!isset($hasPassedLesson)) {
 </section>
 
 <script>
-(function() {
-    var list     = document.getElementById('lesson-points');
-    var btnNext  = document.getElementById('btn-next-point');
-    var hint     = document.getElementById('lesson-hint');
-    var btnSubmit = document.getElementById('btn-submit-quiz');
+    (function() {
+        var list = document.getElementById('lesson-points');
+        var btnNext = document.getElementById('btn-next-point');
+        var hint = document.getElementById('lesson-hint');
+        var btnSubmit = document.getElementById('btn-submit-quiz');
 
-    if (!list || !btnNext) return;
+        if (!list || !btnNext) return;
 
-    var points = Array.prototype.slice.call(list.querySelectorAll('.lesson-point'));
-    if (!points.length) {
-        if (btnSubmit) btnSubmit.disabled = false;
-        return;
-    }
-
-    var currentIndex = 0;
-    var lastShownAt  = Date.now();
-
-    function updateHint(msg) {
-        if (hint) {
-            hint.textContent = msg;
-        }
-    }
-
-    btnNext.addEventListener('click', function() {
-        var currentPoint    = points[currentIndex];
-        var requiredSeconds = parseInt(currentPoint.getAttribute('data-required-seconds') || '0', 10);
-        var requiredMs      = requiredSeconds * 1000;
-        var elapsed         = Date.now() - lastShownAt;
-
-        if (elapsed < requiredMs) {
-            var remaining = Math.ceil((requiredMs - elapsed) / 1000);
-            updateHint('Silakan baca dulu, sekitar ' + remaining +
-                ' detik lagi baru bisa lanjut ke poin berikutnya.');
+        var points = Array.prototype.slice.call(list.querySelectorAll('.lesson-point'));
+        if (!points.length) {
+            if (btnSubmit) btnSubmit.disabled = false;
             return;
         }
 
-        var lastIndex = points.length - 1;
+        var currentIndex = 0;
+        var lastShownAt = Date.now();
 
-        if (currentIndex < lastIndex - 1) {
-            // Masih ada minimal 2 poin lagi
-            currentIndex++;
-            points[currentIndex].style.display = 'list-item';
-            lastShownAt = Date.now();
-            updateHint('Tekan tombol Lanjut lagi setelah membaca poin ini.');
-        } else if (currentIndex === lastIndex - 1) {
-            // Klik ini akan menampilkan poin terakhir
-            currentIndex++;
-            points[currentIndex].style.display = 'list-item';
-            lastShownAt = Date.now();
-            btnNext.disabled = true;
-
-            // Semua poin sudah tampil
-            updateHint('Semua poin materi sudah ditampilkan. Soal bisa diaktifkan (tahap berikutnya).');
-            if (btnSubmit) btnSubmit.disabled = false;
-        } else {
-            // Sudah di poin terakhir sejak awal
-            btnNext.disabled = true;
-            updateHint('Semua poin materi sudah ditampilkan. Soal bisa diaktifkan (tahap berikutnya).');
-            if (btnSubmit) btnSubmit.disabled = false;
+        function updateHint(msg) {
+            if (hint) {
+                hint.textContent = msg;
+            }
         }
-    });
-})();
+
+        btnNext.addEventListener('click', function() {
+            var currentPoint = points[currentIndex];
+            var requiredSeconds = parseInt(currentPoint.getAttribute('data-required-seconds') || '0', 10);
+            var requiredMs = requiredSeconds * 1000;
+            var elapsed = Date.now() - lastShownAt;
+
+            if (elapsed < requiredMs) {
+                var remaining = Math.ceil((requiredMs - elapsed) / 1000);
+                updateHint('Silakan baca dulu, sekitar ' + remaining +
+                    ' detik lagi baru bisa lanjut ke poin berikutnya.');
+                return;
+            }
+
+            var lastIndex = points.length - 1;
+
+            if (currentIndex < lastIndex - 1) {
+                // Masih ada minimal 2 poin lagi
+                currentIndex++;
+                points[currentIndex].style.display = 'list-item';
+                lastShownAt = Date.now();
+                updateHint('Tekan tombol Lanjut lagi setelah membaca poin ini.');
+            } else if (currentIndex === lastIndex - 1) {
+                // Klik ini akan menampilkan poin terakhir
+                currentIndex++;
+                points[currentIndex].style.display = 'list-item';
+                lastShownAt = Date.now();
+                btnNext.disabled = true;
+
+                // Semua poin sudah tampil
+                updateHint('Semua poin materi sudah ditampilkan. Soal bisa diaktifkan (tahap berikutnya).');
+                if (btnSubmit) btnSubmit.disabled = false;
+            } else {
+                // Sudah di poin terakhir sejak awal
+                btnNext.disabled = true;
+                updateHint('Semua poin materi sudah ditampilkan. Soal bisa diaktifkan (tahap berikutnya).');
+                if (btnSubmit) btnSubmit.disabled = false;
+            }
+        });
+    })();
 </script>
