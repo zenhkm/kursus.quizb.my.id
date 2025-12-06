@@ -48,6 +48,20 @@ if ($page === 'admin') {
     include __DIR__ . '/pages/admin_modules.php';
     include __DIR__ . '/layout/footer.php';
 
+// ...
+} elseif ($page === 'admin_questions') {
+    $pageTitle = 'Kelola Soal';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_questions.php';
+    include __DIR__ . '/layout/footer.php';
+
+} elseif ($page === 'admin_question_form') {
+    $pageTitle = 'Form Soal';
+    include __DIR__ . '/layout/header.php';
+    include __DIR__ . '/pages/admin_question_form.php';
+    include __DIR__ . '/layout/footer.php';
+// ...
+
 // -- ROUTE HALAMAN UTAMA (USER) --
 } elseif ($currentCourseSlug && $lessonId) {
     $pageTitle = 'Materi Kursus';

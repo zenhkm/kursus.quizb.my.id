@@ -68,36 +68,39 @@ $lessons = $stmt->fetchAll();
                     </thead>
                     <tbody>
                         <?php foreach ($lessons as $l): ?>
-                        <tr>
-                            <td class="px-3"><?= $l['lesson_order'] ?></td>
-                            <td>
-                                <strong><?= htmlspecialchars($l['title']) ?></strong>
-                            </td>
-                            <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($l['module_title']) ?></span></td>
-                            <td>
-                                <?php if($l['content_type'] == 'video'): ?>
-                                    <span class="badge bg-danger">Video</span>
-                                <?php elseif($l['content_type'] == 'text'): ?>
-                                    <span class="badge bg-primary">Teks</span>
-                                <?php else: ?>
-                                    <span class="badge bg-info">Mixed</span>
-                                <?php endif; ?>
-                            </td>
-                            <td class="text-end px-3">
-                                <a href="#" class="btn btn-sm btn-outline-warning me-1" title="Kelola Soal (Coming Soon)">
-                                    ❓ Soal
-                                </a>
-                                <a href="index.php?page=admin_lesson_form&course_id=<?= $courseId ?>&id=<?= $l['id'] ?>" 
-                                   class="btn btn-sm btn-outline-primary">Edit</a>
-                                <a href="index.php?page=admin_lessons&course_id=<?= $courseId ?>&delete_lesson=<?= $l['id'] ?>" 
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('Hapus materi ini?');">Hapus</a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="px-3"><?= $l['lesson_order'] ?></td>
+                                <td>
+                                    <strong><?= htmlspecialchars($l['title']) ?></strong>
+                                </td>
+                                <td><span class="badge bg-light text-dark border"><?= htmlspecialchars($l['module_title']) ?></span></td>
+                                <td>
+                                    <?php if ($l['content_type'] == 'video'): ?>
+                                        <span class="badge bg-danger">Video</span>
+                                    <?php elseif ($l['content_type'] == 'text'): ?>
+                                        <span class="badge bg-primary">Teks</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-info">Mixed</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-end px-3">
+                                    <a href="index.php?page=admin_questions&lesson_id=<?= $l['id'] ?>&course_id=<?= $courseId ?>"
+                                        class="btn btn-sm btn-outline-warning me-1" title="Kelola Soal">
+                                        ❓ Soal
+                                    </a>
+                                    <a href="index.php?page=admin_lesson_form&course_id=<?= $courseId ?>&id=<?= $l['id'] ?>"
+                                        class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="index.php?page=admin_lessons&course_id=<?= $courseId ?>&delete_lesson=<?= $l['id'] ?>"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Hapus materi ini?');">Hapus</a>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
-                        
-                        <?php if(empty($lessons)): ?>
-                            <tr><td colspan="5" class="text-center py-4">Belum ada materi.</td></tr>
+
+                        <?php if (empty($lessons)): ?>
+                            <tr>
+                                <td colspan="5" class="text-center py-4">Belum ada materi.</td>
+                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
